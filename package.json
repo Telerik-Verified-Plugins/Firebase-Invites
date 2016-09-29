@@ -1,0 +1,32 @@
+{
+  "name": "cordova-plugin-firebase-invites",
+  "version": "0.0.1",
+  "description": "Invite your contacts to install and use your app via Email or SMS",
+  "cordova": {
+    "id": "cordova-plugin-firebase-invites",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-firebase-invites.git"
+  },
+  "keywords": [
+    "Firebase Invites",
+    "Firebase",
+    "Invites",
+    "App Invites",
+    "Google App Invites",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "Telerik / Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EddyVerbruggen/cordova-plugin-firebase-invites/issues"
+  },
+  "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-firebase-invites#readme"
+}

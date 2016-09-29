@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin
+    id="cordova-plugin-firebase-invites"
+		version="0.0.1"
+		xmlns="http://apache.org/cordova/ns/plugins/1.0"
+		xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<name>Firebase Invites</name>
+
+  <author>Telerik / Eddy Verbruggen - @EddyVerbruggen</author>
+
+  <description>Invite your contacts to install and use your app via Email or SMS</description>
+
+  <keywords>Firebase Invites, Firebase, Invites, App Invites, Google App Invites</keywords>
+
+	<license>MIT</license>
+
+	<engines>
+		<engine name="cordova" version=">=3.5.0" />
+	</engines>
+
+	<js-module name="FirebaseInvites" src="www/FirebaseInvites.js">
+		<clobbers target="FirebaseInvites" />
+	</js-module>
+
+	<!-- (At least on iOS) users must be signed in with their Google account in order to be able to send an invite, so include the Google Sign-In plugin -->
+	<dependency id="cordova-plugin-googleplus" />
+
+	<!--platform name="android">
+		<config-file parent="/*" target="res/xml/config.xml">
+			<feature name="FirebaseInvites">
+				<param name="android-package" value="com.telerik.plugins.firebaseinvites.FirebaseInvites" />
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+		<config-file parent="/resources" target="res/values/strings.xml">
+			<string name="google_app_id">@string/google_app_id</string>
+		</config-file>
+		<config-file parent="/resources" target="res/values/strings.xml">
+			<string name="google_api_key">@string/google_api_key</string>
+		</config-file>
+		<source-file src="src/android/google-services.json" target-dir="." />
+		<source-file src="src/android/FirebaseInvites.java" target-dir="src/com/telerik/plugins/firebaseinvites" />
+
+		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+		<framework src="com.google.firebase:firebase-core:+" />
+		<framework src="com.google.firebase:firebase-invites:+" />
+
+		<hook type="after_plugin_install" src="hooks/android/copy-google-services.js" />
+	</platform-->
+
+	<platform name="ios">
+		<config-file parent="/*" target="config.xml">
+			<feature name="FirebaseInvites">
+				<param name="ios-package" value="FirebaseInvites" />
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+
+    <config-file target="*-Info.plist" parent="FirebaseAppDelegateProxyEnabled">
+		  <false/>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="NSContactsUsageDescription">
+		  <string>$NSContactsUsageDescription</string>
+    </config-file>
+
+    <preference name="REVERSED_CLIENT_ID" />
+    <preference name="NSContactsUsageDescription" default=" " />
+		<preference name="ASSOCIATED_DOMAINS" />
+
+    <config-file target="*-Info.plist" parent="AssociatedDomainsApplink">
+      <string>$ASSOCIATED_DOMAINS</string>
+    </config-file>
+
+		<header-file src="src/ios/AppDelegate+FirebaseInvites.h" />
+		<source-file src="src/ios/AppDelegate+FirebaseInvites.m" />
+		<header-file src="src/ios/FirebaseInvites.h" />
+		<source-file src="src/ios/FirebaseInvites.m" />
+
+		<framework src="AddressBook.framework" weak="true" />
+		<framework src="AdSupport.framework" weak="true" />
+		<framework src="CoreMotion.framework" weak="true" />
+		<framework src="CoreText.framework" weak="true" />
+		<framework src="libsqlite3.dylib"/>
+		<framework src="libstdc++.dylib" />
+		<framework src="libz.dylib"/>
+		<framework src="MessageUI.framework" weak="true" />
+		<framework src="QuartzCore.framework" weak="true" />
+		<framework src="SafariServices.framework" weak="true" />
+		<framework src="SystemConfiguration.framework" weak="true" />
+		<framework src="WebKit.framework" weak="true" />
+
+		<header-file src="src/ios/Firebase/Firebase.h" />
+
+		<framework custom="true" src="src/ios/Firebase/Invites/FirebaseDynamicLinks.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/FirebaseInvites.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GoogleAppUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GoogleAuthUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GoogleNetworkingUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GoogleParsingUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GooglePlusUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Invites/GoogleSignIn.framework" />
+
+		<framework custom="true" src="src/ios/Firebase/Analytics/FirebaseAnalytics.framework" />
+		<framework custom="true" src="src/ios/Firebase/Analytics/FirebaseInstanceID.framework" />
+		<framework custom="true" src="src/ios/Firebase/Analytics/GoogleInterchangeUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Analytics/GoogleSymbolUtilities.framework" />
+		<framework custom="true" src="src/ios/Firebase/Analytics/GoogleUtilities.framework" />
+
+		<resource-file src="src/ios/Firebase/Invites/Resources/GINInviteResources.bundle" />
+		<resource-file src="src/ios/Firebase/Invites/Resources/GoogleSignIn.bundle" />
+		<resource-file src="src/ios/Firebase/Invites/Resources/GPPACLPickerResources.bundle" />
+		<resource-file src="src/ios/Firebase/Invites/Resources/GTMOAuth2ViewTouch.xib" />
+
+		<hook type="after_plugin_install" src="hooks/ios/prerequisites.js"/>
+		<hook type="after_plugin_install" src="hooks/ios/add-resources.js" />
+	</platform>
+</plugin>
