@@ -26,20 +26,13 @@
 	<!-- (At least on iOS) users must be signed in with their Google account in order to be able to send an invite, so include the Google Sign-In plugin -->
 	<dependency id="cordova-plugin-googleplus" />
 
-	<!--platform name="android">
+	<platform name="android">
 		<config-file parent="/*" target="res/xml/config.xml">
 			<feature name="FirebaseInvites">
 				<param name="android-package" value="com.telerik.plugins.firebaseinvites.FirebaseInvites" />
 				<param name="onload" value="true" />
 			</feature>
 		</config-file>
-		<config-file parent="/resources" target="res/values/strings.xml">
-			<string name="google_app_id">@string/google_app_id</string>
-		</config-file>
-		<config-file parent="/resources" target="res/values/strings.xml">
-			<string name="google_api_key">@string/google_api_key</string>
-		</config-file>
-		<source-file src="src/android/google-services.json" target-dir="." />
 		<source-file src="src/android/FirebaseInvites.java" target-dir="src/com/telerik/plugins/firebaseinvites" />
 
 		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
@@ -47,7 +40,7 @@
 		<framework src="com.google.firebase:firebase-invites:+" />
 
 		<hook type="after_plugin_install" src="hooks/android/copy-google-services.js" />
-	</platform-->
+	</platform>
 
 	<platform name="ios">
 		<config-file parent="/*" target="config.xml">
