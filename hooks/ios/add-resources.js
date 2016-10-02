@@ -11,13 +11,13 @@ module.exports = function (context) {
   var fs = require('fs');
 
   var getValue = function(config, name) {
-      var value = config.match(new RegExp('<' + name + '>(.*?)</' + name + '>', "i"))
+      var value = config.match(new RegExp('<' + name + '>(.*?)</' + name + '>', "i"));
       if(value && value[1]) {
-          return value[1]
+          return value[1];
       } else {
-          return null
+          return null;
       }
-  }
+  };
 
   function fileExists(path) {
     try  {
@@ -84,14 +84,6 @@ module.exports = function (context) {
         }
       }
 
-      // also add something similar to this to the entitlements file:
-      // <key>com.apple.developer.associated-domains</key>
-      // <array>
-		  //   <string>applinks:applinks:s35v6.app.goo.gl</string>
-	    // </array>
-
-      // get AssociatedDomainsApplink from plist
-
       var projectPlistPath = path.join(iosFolder, projName, util.format('%s-Info.plist', projName));
       var projectPlistJson = plist.parse(fs.readFileSync(projectPlistPath, 'utf8'));
       var associatedDomainsApplink = projectPlistJson.AssociatedDomainsApplink;
@@ -103,7 +95,6 @@ module.exports = function (context) {
       var entitlementsFileObj = plist.parse(entitlementsFileXml);
       entitlementsFileObj["com.apple.developer.associated-domains"] = ["applinks:" + associatedDomainsApplink];
       entitlementsFileXml = plist.build(entitlementsFileObj);
-      console.log("entitlementsFileXml: " + entitlementsFileXml);
       fs.writeFileSync(entitlementsFile, entitlementsFileXml, { encoding: 'utf8' });
 
     } else {
@@ -114,7 +105,7 @@ module.exports = function (context) {
   }
 
   fs.readFile("config.xml", 'utf8', function (err, config) {
-    var name = getValue(config, "name")
+    var name = getValue(config, "name");
 
     if (directoryExists("platforms/ios")) {
       var paths = ["GoogleService-Info.plist", "platforms/ios/www/GoogleService-Info.plist"];
@@ -130,8 +121,8 @@ module.exports = function (context) {
             }
             fs.writeFileSync(destFolder + "/GoogleService-Info.plist", contents);
             addResourceToXcodeProject("GoogleService-Info.plist");
-          } catch (err) {
-            logMe(err);
+          } catch (err2) {
+            logMe(err2);
           }
           break;
         }
@@ -144,4 +135,4 @@ module.exports = function (context) {
   });
 
   return deferral.promise;
-}
+};
