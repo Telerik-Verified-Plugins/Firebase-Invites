@@ -76,10 +76,12 @@ public class FirebaseInvites extends CordovaPlugin implements GoogleApiClient.On
                             JSONObject response = new JSONObject()
                                 .put("deepLink", AppInviteReferral.getDeepLink(intent))
                                 .put("invitationId", AppInviteReferral.getInvitationId(intent));
-                            _sendInvitationCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, response));
+                            _getInvitationCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, response));
                           } catch (JSONException e) {
-                            _sendInvitationCallbackContext.error(e.getMessage());
+                            _getInvitationCallbackContext.error(e.getMessage());
                           }
+                        } else {
+                          _getInvitationCallbackContext.error("Not launched by invitation");
                         }
                       }
                     });

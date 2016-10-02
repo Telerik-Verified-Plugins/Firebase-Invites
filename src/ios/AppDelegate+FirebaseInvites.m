@@ -21,7 +21,6 @@
     [self application:application swizzledDidFinishLaunchingWithOptions:launchOptions];
 
     [FIRApp configure];
-
     return YES;
 }
 
@@ -34,19 +33,17 @@
     FIRReceivedInvite *invite = [FIRInvites handleURL:url sourceApplication:sourceApplication annotation:annotation];
     if (invite) {
         NSString *matchType = (invite.matchType == FIRReceivedInviteMatchTypeWeak) ? @"Weak" : @"Strong";
-        NSString *message = [NSString stringWithFormat:@"Deep link from %@ \nInvite ID: %@\nApp URL: %@\nMatch Type:%@",
-                                           sourceApplication, invite.inviteId, invite.deepLink, matchType];
 
-        [[[UIAlertView alloc] initWithTitle:@"Deep-link Data"
-                                    message:message
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-
+        FirebaseInvites *fbInvites = [self.viewController getCommandInstance:@"FirebaseInvites"];
+        fbInvites.cachedInvitation = @{
+                                       @"deepLink": invite.deepLink,
+                                       @"invitationId": invite.inviteId,
+                                       @"matchType": matchType
+                                       };
         return YES;
     }
 
-    // if the GooglePlus.m version is not called, we can do this here:
+    // Note that if the GooglePlus.m version is not called, we can do this here (but seems ok):
 //    return [[GIDSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
 
     // call super
