@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
-    <link rel="stylesheet" type="text/css" href="css/index.css"/>
-    <meta name="msapplication-tap-highlight" content="no"/>
-    <title>Hello World</title>
+  <meta charset="utf-8"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css"/>
+  <meta name="msapplication-tap-highlight" content="no"/>
+  <title>Hello World</title>
 </head>
 <body>
 <div class="app">
-    <img id="image" style="position:absolute; top:10px; left:10px" src="" />
+  <img id="image" style="position:absolute; top:10px; left:10px" src="" />
 
-    <h1>Firebase Invites</h1>
+  <h1>Firebase Invites</h1>
 
-    <div id="deviceready" class="blink">
-        <p class="event listening">Connecting to Device</p>
-        <p class="event received">Device is Ready</p>
+  <div id="deviceready" class="blink">
+    <p class="event listening">Connecting to Device</p>
+    <p class="event received">Device is Ready!</p>
 
-        <p>Invites require the user to be logged in first!</p>
-        <button onclick="sendInvitation()">send invitation(s)</button>
-        <p id="feedback">not logged in</p>
-        <button onclick="isAvailable()">Google Sign-In Available?</button>
-        <br/><br/>
-        <button onclick="login()">Login with Google+</button>
-        <br/><br/>
-        <button onclick="trySilentLogin()">Try silent login with Google+</button>
-        <br/><br/>
-        <button onclick="logout()">Logout</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button onclick="disconnect()">Disconnect</button>
-        <br/><br/>
-        <button onclick="window.plugins.googleplus.getSigningCertificateFingerprint(function(res){alert(res)}, function(res){alert(res)})">get cert fingerprint (Android)</button>
-    </div>
+    <p>On iOS, invites require the user to be logged in first!</p>
+    <button onclick="getInvitation()">get invitation this app was launched by</button>
+    <button onclick="sendInvitation()">send invitation(s)</button>
+
+    <p id="feedback">not logged in</p>
+    <button onclick="isAvailable()">Google Sign-In Available?</button>
+    <br/><br/>
+    <button onclick="login()">Login with Google+</button>
+    <br/><br/>
+    <button onclick="trySilentLogin()">Try silent login with Google+</button>
+    <br/><br/>
+    <button onclick="logout()">Logout</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="disconnect()">Disconnect</button>
+    <br/><br/>
+    <button onclick="window.plugins.googleplus.getSigningCertificateFingerprint(function(res){alert(res)}, function(res){alert(res)})">get cert fingerprint (Android)</button>
+  </div>
 </div>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
@@ -44,8 +46,23 @@
         FirebaseInvites.sendInvitation(
                 {
                     title: "The title",
-                    message: "The message"
+                    message: "The message",
+                    deepLink: "myapp://deeplink",
+                    callToActionText: "My CTA",
+                    customImage: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                    //emailSubject: "My Email subject",
+                    //emailHtmlContent: "Some <strong>HTML</strong> content",
+                    androidClientID: "123abc",
+                    // You can find your iOS app's client ID in the GoogleService-Info.plist file you downloaded from the Firebase console
+                    iosClientID: "abc123"
                 },
+                function(msg) {alert(JSON.stringify(msg))},
+                function(msg) {alert(JSON.stringify(msg))}
+        );
+    }
+
+    function getInvitation(){
+        FirebaseInvites.getInvitation(
                 function(msg) {alert(JSON.stringify(msg))},
                 function(msg) {alert(JSON.stringify(msg))}
         );

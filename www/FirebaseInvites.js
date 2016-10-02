@@ -14,3 +14,7 @@ exports.sendInvitation = function(options, onSuccess, onError) {
     }
     exec(onSuccess, onError, "FirebaseInvites", "sendInvitation", [opts]);
 };
+
+exports.getInvitation = function(onSuccess, onError) {
+    exec(onSuccess, onError, "FirebaseInvites", "getInvitation", []);
+};
