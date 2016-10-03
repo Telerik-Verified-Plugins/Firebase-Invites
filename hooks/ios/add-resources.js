@@ -1,6 +1,4 @@
 module.exports = function (context) {
-  var Q = context.requireCordovaModule('q');
-  var deferral = new Q.defer();
 
   function logMe(what) {
     console.error(what);
@@ -104,35 +102,28 @@ module.exports = function (context) {
     fs.writeFileSync(projectPath, pbxProject.writeSync());
   }
 
-  fs.readFile("config.xml", 'utf8', function (err, config) {
-    var name = getValue(config, "name");
+  if (directoryExists("platforms/ios")) {
+    var paths = ["GoogleService-Info.plist", "platforms/ios/www/GoogleService-Info.plist"];
 
-    if (directoryExists("platforms/ios")) {
-      var paths = ["GoogleService-Info.plist", "platforms/ios/www/GoogleService-Info.plist"];
-
-      for (var i = 0; i < paths.length; i++) {
-        if (fileExists(paths[i])) {
-          try {
-            var contents = fs.readFileSync(paths[i]).toString();
-            logMe("Found this file to write to iOS: " + paths[i]);
-            var destFolder = "platforms/ios/" + name + "/Resources";
-            if (!fs.existsSync(destFolder)) {
-              fs.mkdirSync(destFolder);
-            }
-            fs.writeFileSync(destFolder + "/GoogleService-Info.plist", contents);
-            addResourceToXcodeProject("GoogleService-Info.plist");
-          } catch (err2) {
-            logMe(err2);
+    for (var i = 0; i < paths.length; i++) {
+      if (fileExists(paths[i])) {
+        try {
+          var contents = fs.readFileSync(paths[i]).toString();
+          logMe("Found this file to write to iOS: " + paths[i]);
+          var destFolder = "platforms/ios/" + projName + "/Resources";
+          if (!fs.existsSync(destFolder)) {
+            fs.mkdirSync(destFolder);
           }
-          break;
+          fs.writeFileSync(destFolder + "/GoogleService-Info.plist", contents);
+          addResourceToXcodeProject("GoogleService-Info.plist");
+        } catch (err2) {
+          logMe(err2);
         }
+        break;
       }
-
-      addResourceToXcodeProject(".entitlements", true);
     }
-    logMe("END Running hook to copy any available google-services file to iOS");
-    deferral.resolve();
-  });
 
-  return deferral.promise;
+    addResourceToXcodeProject(".entitlements", true);
+  }
+  logMe("END Running hook to copy any available google-services file to iOS");
 };
