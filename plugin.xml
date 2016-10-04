@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <plugin
     id="cordova-plugin-firebase-invites"
-		version="1.0.0"
+		version="1.0.1"
 		xmlns="http://apache.org/cordova/ns/plugins/1.0"
 		xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -51,7 +51,6 @@
 		</config-file>
 
     <preference name="REVERSED_CLIENT_ID" />
-    <preference name="NSContactsUsageDescription" default=" " />
     <preference name="ASSOCIATED_DOMAINS" />
 
     <config-file target="*-Info.plist" parent="FirebaseAppDelegateProxyEnabled">
@@ -59,7 +58,7 @@
     </config-file>
 
     <config-file target="*-Info.plist" parent="NSContactsUsageDescription">
-		  <string>$NSContactsUsageDescription</string>
+		  <string> </string>
     </config-file>
 
     <config-file target="*-Info.plist" parent="AssociatedDomainsApplink">
