@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-firebase-invites",
-  "version": "0.9.4",
+  "version": "1.0.0",
   "description": "Invite your contacts to install and use your app via Email or SMS",
   "cordova": {
     "id": "cordova-plugin-firebase-invites",
