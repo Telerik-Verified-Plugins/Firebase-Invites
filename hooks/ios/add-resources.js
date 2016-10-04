@@ -39,27 +39,8 @@ module.exports = function (context) {
     }
   }
 
-  function addResourceToXcodeProject(resourceName, iosFolder, isEntitlementFile) {
-    var data = fs.readdirSync(iosFolder);
-    var projFolder;
-    var projName;
-
-    // Find the project folder by looking for *.xcodeproj
-    if (data && data.length) {
-      data.forEach(function (folder) {
-        if (folder.match(/\.xcodeproj$/)) {
-          projFolder = path.join(iosFolder, folder);
-          projName = path.basename(folder, '.xcodeproj');
-        }
-      });
-    }
-
-    if (!projFolder || !projName) {
-      throw new Error("Could not find an .xcodeproj folder in: " + iosFolder);
-    }
-
+  function addResourceToXcodeProject(resourceName, projName, projFolder, iosFolder, isEntitlementFile) {
     var projectPath = path.join(projFolder, 'project.pbxproj');
-
     var pbxProject;
     if (context.opts.cordova.project) {
       pbxProject = context.opts.cordova.project.parseProjectFile(context.opts.projectRoot).xcode;
@@ -101,6 +82,21 @@ module.exports = function (context) {
   var iosPlatform = path.join(context.opts.projectRoot, 'platforms/ios/');
   var iosFolder = fs.existsSync(iosPlatform) ? iosPlatform : context.opts.projectRoot;
 
+  var data = fs.readdirSync(iosFolder);
+  var projFolder;
+  var projName;
+  if (data && data.length) {
+    data.forEach(function (folder) {
+      if (folder.match(/\.xcodeproj$/)) {
+        projFolder = path.join(iosFolder, folder);
+        projName = path.basename(folder, '.xcodeproj');
+      }
+    });
+  }
+  if (!projFolder || !projName) {
+    throw new Error("Could not find an .xcodeproj folder in: " + iosFolder);
+  }
+
   if (directoryExists(iosFolder)) {
     var paths = ["GoogleService-Info.plist", path.join(iosFolder, "www", "GoogleService-Info.plist")];
 
@@ -114,7 +110,7 @@ module.exports = function (context) {
             fs.mkdirSync(destFolder);
           }
           fs.writeFileSync(destFolder + "/GoogleService-Info.plist", contents);
-          addResourceToXcodeProject("GoogleService-Info.plist", iosFolder);
+          addResourceToXcodeProject("GoogleService-Info.plist", projName, projFolder, iosFolder);
         } catch (err2) {
           logMe(err2);
         }
@@ -122,7 +118,7 @@ module.exports = function (context) {
       }
     }
 
-    addResourceToXcodeProject(".entitlements", iosFolder, true);
+    addResourceToXcodeProject(".entitlements", projName, projFolder, iosFolder, true);
   }
   logMe("END Running hook to copy any available google-services file to iOS");
 };
