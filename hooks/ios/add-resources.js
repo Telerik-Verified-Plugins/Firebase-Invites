@@ -1,12 +1,16 @@
 module.exports = function (context) {
 
+  var fs = require('fs'),
+      path = require('path'),
+      xcode = require('xcode'),
+      plist = require('plist'),
+      util = require('util');
+
   function logMe(what) {
     console.error(what);
   }
 
   logMe("START Running hook to copy any available google-services file to iOS");
-
-  var fs = require('fs');
 
   var getValue = function(config, name) {
       var value = config.match(new RegExp('<' + name + '>(.*?)</' + name + '>', "i"));
@@ -36,11 +40,6 @@ module.exports = function (context) {
   }
 
   function addResourceToXcodeProject(resourceName, iosFolder, isEntitlementFile) {
-    var xcode = require('xcode'),
-        path = require('path'),
-        plist = require('plist'),
-        util = require('util');
-
     var data = fs.readdirSync(iosFolder);
     var projFolder;
     var projName;

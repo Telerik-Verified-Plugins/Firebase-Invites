@@ -1,12 +1,13 @@
 module.exports = function (context) {
 
+  var fs = require('fs'),
+      path = require('path');
+
   function logMe(what) {
     console.error(what);
   }
 
   logMe("Running hook to copy any available google-services file to Android");
-
-  var fs = require('fs');
 
   function fileExists(path) {
     try  {
