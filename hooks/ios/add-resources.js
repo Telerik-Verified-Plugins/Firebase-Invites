@@ -35,14 +35,11 @@ module.exports = function (context) {
     }
   }
 
-  function addResourceToXcodeProject(resourceName, isEntitlementFile) {
+  function addResourceToXcodeProject(resourceName, iosFolder, isEntitlementFile) {
     var xcode = require('xcode'),
         path = require('path'),
         plist = require('plist'),
         util = require('util');
-
-    var iosPlatform = path.join(context.opts.projectRoot, 'platforms/ios/');
-    var iosFolder = fs.existsSync(iosPlatform) ? iosPlatform : context.opts.projectRoot;
 
     var data = fs.readdirSync(iosFolder);
     var projFolder;
@@ -102,20 +99,23 @@ module.exports = function (context) {
     fs.writeFileSync(projectPath, pbxProject.writeSync());
   }
 
-  if (directoryExists("platforms/ios")) {
-    var paths = ["GoogleService-Info.plist", "platforms/ios/www/GoogleService-Info.plist"];
+  var iosPlatform = path.join(context.opts.projectRoot, 'platforms/ios/');
+  var iosFolder = fs.existsSync(iosPlatform) ? iosPlatform : context.opts.projectRoot;
+
+  if (directoryExists(iosFolder)) {
+    var paths = ["GoogleService-Info.plist", path.join(iosFolder, "www", "GoogleService-Info.plist")];
 
     for (var i = 0; i < paths.length; i++) {
       if (fileExists(paths[i])) {
         try {
           var contents = fs.readFileSync(paths[i]).toString();
           logMe("Found this file to write to iOS: " + paths[i]);
-          var destFolder = "platforms/ios/" + projName + "/Resources";
+          var destFolder = path.join(iosFolder, projName, "Resources");
           if (!fs.existsSync(destFolder)) {
             fs.mkdirSync(destFolder);
           }
           fs.writeFileSync(destFolder + "/GoogleService-Info.plist", contents);
-          addResourceToXcodeProject("GoogleService-Info.plist");
+          addResourceToXcodeProject("GoogleService-Info.plist", iosFolder);
         } catch (err2) {
           logMe(err2);
         }
@@ -123,7 +123,7 @@ module.exports = function (context) {
       }
     }
 
-    addResourceToXcodeProject(".entitlements", true);
+    addResourceToXcodeProject(".entitlements", iosFolder, true);
   }
   logMe("END Running hook to copy any available google-services file to iOS");
 };

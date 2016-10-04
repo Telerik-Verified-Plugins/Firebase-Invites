@@ -26,18 +26,21 @@ module.exports = function (context) {
     }
   }
 
-  if (directoryExists("platforms/android")) {
-    var paths = ["google-services.json", "platforms/android/assets/www/google-services.json"];
+  var androidPlatform = path.join(context.opts.projectRoot, 'platforms/android/');
+  var androidFolder = fs.existsSync(androidPlatform) ? androidPlatform : context.opts.projectRoot;
+
+  if (directoryExists(androidFolder)) {
+    var paths = ["google-services.json", path.join(androidFolder, "assets/www/google-services.json")];
 
     for (var i = 0; i < paths.length; i++) {
       if (fileExists(paths[i])) {
         logMe("Found this file to write to Android: " + paths[i]);
         try {
           var contents = fs.readFileSync(paths[i]).toString();
-          fs.writeFileSync("platforms/android/google-services.json", contents);
+          fs.writeFileSync(path.join(androidFolder, "google-services.json"), contents);
 
           var json = JSON.parse(contents);
-          var strings = fs.readFileSync("platforms/android/res/values/strings.xml").toString();
+          var strings = fs.readFileSync(path.join(androidFolder, "res/values/strings.xml")).toString();
 
           // strip non-default value
           strings = strings.replace(new RegExp('<string name="google_app_id">([^\@<]+?)</string>', "i"), '');
@@ -54,7 +57,7 @@ module.exports = function (context) {
           // replace the default value
           strings = strings.replace(new RegExp('<string name="google_api_key">([^<]+?)</string>', "i"), '<string name="google_api_key">' + json.client[0].api_key[0].current_key + '</string>');
 
-          fs.writeFileSync("platforms/android/res/values/strings.xml", strings);
+          fs.writeFileSync(path.join(androidFolder, "res/values/strings.xml"), strings);
         } catch(err) {
           logMe(err);
         }
@@ -63,4 +66,4 @@ module.exports = function (context) {
       }
     }
   }
-}
+};
