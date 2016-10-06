@@ -110,7 +110,7 @@ public class FirebaseInvites extends CordovaPlugin implements GoogleApiClient.On
               }
 
               if (options.has("callToActionText")) {
-                builder.setCallToActionText(options.getString("deepLink"));
+                builder.setCallToActionText(options.getString("callToActionText"));
               }
 
               if (options.has("customImage")) {
@@ -154,7 +154,7 @@ public class FirebaseInvites extends CordovaPlugin implements GoogleApiClient.On
         try {
           JSONObject response = new JSONObject()
               .put("count", ids.length)
-              .put("invitationIds", ids);
+              .put("invitationIds", new JSONArray(ids));
           _sendInvitationCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, response));
         } catch (JSONException e) {
           _sendInvitationCallbackContext.error(e.getMessage());
