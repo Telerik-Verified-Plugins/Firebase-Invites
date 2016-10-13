@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin
+    id="cordova-plugin-firebase-dynamiclinks"
+    version="1.0.1"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>FirebaseDynamicLinksPlugin</name>
+    <description>Cordova plugin for Firebase Dynamic Links</description>
+    <license>MIT</license>
+    <keywords>cordova</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=3.5.0" />
+    </engines>
+
+    <js-module name="FirebaseDynamicLinks" src="www/FirebaseDynamicLinks.js">
+        <merges target="cordova.plugins.firebase.dynamiclinks" />
+    </js-module>
+
+    <!-- (At least on iOS) users must be signed in with their Google account in order to be able to send an invite, so include the Google Sign-In plugin -->
+    <dependency id="cordova-plugin-googleplus" url="https://github.com/chemerisuk/cordova-plugin-googleplus"/>
+    <dependency id="cordova-plugin-firebase-hooks"/>
+
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="FirebaseDynamicLinks">
+                <param name="android-package" value="com.telerik.plugins.firebaseinvites.FirebaseDynamicLinks" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <preference name="APP_DOMAIN" />
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="$APP_DOMAIN" android:scheme="http"/>
+                <data android:host="$APP_DOMAIN" android:scheme="https"/>
+            </intent-filter>
+        </config-file>
+
+        <source-file src="src/android/FirebaseDynamicLinks.java" target-dir="src/by/chemerisuk/cordova/firebase" />
+
+        <framework src="com.google.firebase:firebase-invites:+" />
+    </platform>
+
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+             <feature name="FirebaseDynamicLinks">
+                <param name="ios-package" value="FirebaseDynamicLinks" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <preference name="REVERSED_CLIENT_ID" />
+        <preference name="ASSOCIATED_DOMAINS" />
+
+        <config-file target="*-Info.plist" parent="NSContactsUsageDescription">
+           <string> </string>
+        </config-file>
+
+        <header-file src="src/ios/AppDelegate+FirebaseDynamicLinks.h" />
+        <source-file src="src/ios/AppDelegate+FirebaseDynamicLinks.m" />
+        <header-file src="src/ios/FirebaseDynamicLinks.h" />
+        <source-file src="src/ios/FirebaseDynamicLinks.m" />
+
+        <pod id="Firebase/Invites" />
+        <pod id="Firebase/DynamicLinks" />
+    </platform>
+
+</plugin>
