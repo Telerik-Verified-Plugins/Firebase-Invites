@@ -19,8 +19,9 @@
 
 - (BOOL)application:(UIApplication *)application swizzledDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self application:application swizzledDidFinishLaunchingWithOptions:launchOptions];
-
-    [FIRApp configure];
+    if([FIRApp defaultApp] == nil){
+        [FIRApp configure];
+    }
     return YES;
 }
 
